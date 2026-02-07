@@ -18,9 +18,14 @@ func main() {
 
 	r := gin.Default()
 
+	// Existing routes
 	r.GET("/students", handler.GetStudents)
 	r.GET("/students/:id", handler.GetStudentByID)
 	r.POST("/students", handler.CreateStudent)
+
+	// New routes for HW challenges
+	r.PUT("/students/:id", handler.UpdateStudent)
+	r.DELETE("/students/:id", handler.DeleteStudent)
 
 	r.Run(":8080")
 }

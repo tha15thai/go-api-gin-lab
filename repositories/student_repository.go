@@ -47,3 +47,37 @@ func (r *StudentRepository) Create(s models.Student) error {
 	)
 	return err
 }
+
+// Challenge 1: Update Student
+func (r *StudentRepository) Update(id string, s models.Student) (*models.Student, error) {
+	// ตรวจสอบว่านักเรียนมีอยู่จริงหรือไม่
+	_, err := r.GetByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	// อัปเดตข้อมูล
+	_, err = r.DB.Exec(
+		"UPDATE students SET name = ?, major = ?, gpa = ? WHERE id = ?",
+		s.Name, s.Major, s.GPA, id,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	// ดึงข้อมูลที่อัปเดตแล้วกลับมา
+	return r.GetByID(id)
+}
+
+// Challenge 2: Delete Student
+func (r *StudentRepository) Delete(id string) error {
+	// ตรวจสอบว่านักเรียนมีอยู่จริงหรือไม่
+	_, err := r.GetByID(id)
+	if err != nil {
+		return err
+	}
+
+	// ลบข้อมูล
+	_, err = r.DB.Exec("DELETE FROM students WHERE id = ?", id)
+	return err
+}
